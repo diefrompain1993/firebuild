@@ -29,5 +29,12 @@ export default defineConfig({
 		}),
 		sitemap(),
 		tailwind()
-	]
+	],
+	vite: {
+		optimizeDeps: {
+			noDiscovery: true,
+			include: [], // Оставьте пустым или укажите зависимости, которые нужно включить
+		}
+	}
 })
+
