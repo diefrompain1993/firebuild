@@ -88,6 +88,7 @@ import LogoSmallIcon from './icons/LogoSmallIcon.astro'
 							></button
 						>
 					</div>
+					<ToggleTheme />
 				</div>
 			</header>
 			<nav
@@ -131,36 +132,54 @@ import LogoSmallIcon from './icons/LogoSmallIcon.astro'
 				class='lg:flex hidden items-center justify-center cursor-pointer dark:bg-white bg-[#0a0910] rounded-full px-6 py-2'
 				><a class='text-sm mr-auto dark:text-black text-white' href='/'>Оставить заявку</a></button
 			>
-			<ToggleTheme />
 		</div>
+		<ToggleTheme />
 	</div>
 </header>
+
 <script>
-	const headerDrawer = document.getElementById('astro-header-drawer')
-	const headerOverlay = document.getElementById('header-overlay')
-	const menuButtons = document.querySelectorAll('#astro-header-drawer-button')
+	const initializeMenu = () => {
+		const headerDrawer = document.getElementById('astro-header-drawer')
+		const headerOverlay = document.getElementById('header-overlay')
+		const menuButtons = document.querySelectorAll('#astro-header-drawer-button')
 
-	if (menuButtons && headerDrawer && headerOverlay) {
+		// Очищаем существующие обработчики
 		menuButtons.forEach((button) => {
-			button.addEventListener('click', () => {
-				const isOpen = headerDrawer.classList.contains('!translate-y-0')
+			button.replaceWith(button.cloneNode(true))
+		})
 
-				if (isOpen) {
-					headerDrawer.classList.remove('!translate-y-0')
-					headerOverlay.classList.remove('opacity-100', 'pointer-events-auto')
-					document.body.classList.remove('overflow-hidden')
-				} else {
-					headerDrawer.classList.add('!translate-y-0')
-					headerOverlay.classList.add('opacity-100', 'pointer-events-auto')
-					document.body.classList.add('overflow-hidden')
-				}
+		// Получаем обновленные кнопки
+		const updatedMenuButtons = document.querySelectorAll('#astro-header-drawer-button')
+
+		// Добавляем обработчики событий
+		if (updatedMenuButtons && headerDrawer && headerOverlay) {
+			updatedMenuButtons.forEach((button) => {
+				button.addEventListener('click', () => {
+					const isOpen = headerDrawer.classList.contains('!translate-y-0')
+
+					// Открыть или закрыть меню
+					if (isOpen) {
+						headerDrawer.classList.remove('!translate-y-0')
+						headerOverlay.classList.remove('opacity-100', 'pointer-events-auto')
+						document.body.classList.remove('overflow-hidden')
+					} else {
+						headerDrawer.classList.add('!translate-y-0')
+						headerOverlay.classList.add('opacity-100', 'pointer-events-auto')
+						document.body.classList.add('overflow-hidden')
+					}
+				})
 			})
-		})
 
-		headerOverlay.addEventListener('click', () => {
-			headerDrawer.classList.remove('!translate-y-0')
-			headerOverlay.classList.remove('opacity-100', 'pointer-events-auto')
-			document.body.classList.remove('overflow-hidden')
-		})
+			// Закрыть меню при клике на оверлей
+			headerOverlay.addEventListener('click', () => {
+				headerDrawer.classList.remove('!translate-y-0')
+				headerOverlay.classList.remove('opacity-100', 'pointer-events-auto')
+				document.body.classList.remove('overflow-hidden')
+			})
+		}
 	}
+
+	// Инициализируем меню при загрузке и переходах в SPA
+	document.addEventListener('DOMContentLoaded', initializeMenu)
+	document.addEventListener('astro:page-load', initializeMenu)
 </script>
