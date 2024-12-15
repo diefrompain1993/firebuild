@@ -5,6 +5,8 @@ import MenuIcon from './icons/MenuIcon.astro'
 import CrossIcon from './icons/CrossIcon.astro'
 import Search from '@/components/Search'
 import ToggleTheme from './ToggleTheme.astro'
+import LogoIcon from './icons/LogoIcon.astro'
+import LogoSmallIcon from './icons/LogoSmallIcon.astro'
 
 // ADD YOUR SOCIAL NETWORKS HERE
 // const SOCIALNETWORKS = [
@@ -26,7 +28,7 @@ import ToggleTheme from './ToggleTheme.astro'
 	<div
 		class='flex items-center flex-row lg:hidden dark:bg-gray-800 bg-gray-200 px-4 py-2 rounded-lg w-[50%] justify-between'
 	>
-		<span class='text-lg font-bold dark:text-white text-black'>LOGO</span>
+		<LogoSmallIcon />
 		<button
 			id='astro-header-drawer-button'
 			type='button'
@@ -38,9 +40,10 @@ import ToggleTheme from './ToggleTheme.astro'
 		</button>
 	</div>
 	<div class='mr-auto flex-row items-center lg:flex hidden'>
-		<div class='w-20 h-20 bg-[#0a0910] dark:bg-white flex justify-center items-center'>
+		<!-- <div class='w-20 h-20 bg-[#0a0910] dark:bg-white flex justify-center items-center'>
 			<span class='text-xl font-bold text-white dark:text-black'>LOGO</span>
-		</div>
+		</div> -->
+		<LogoIcon />
 		<nav class='flex flex-row items-center ml-8 gap-x-6'>
 			<a class='text-base mr-auto' href='/'>Услуги</a>
 			<a class='text-base mr-auto' href='/'>Принципы</a>
@@ -60,7 +63,7 @@ import ToggleTheme from './ToggleTheme.astro'
 				<div
 					class='flex items-center flex-row lg:hidden dark:bg-gray-800 bg-gray-200 px-4 py-2 rounded-lg w-[50%] justify-between'
 				>
-					<span class='text-lg font-bold dark:text-white text-black'>LOGO</span>
+					<LogoSmallIcon />
 					<button
 						id='astro-header-drawer-button'
 						type='button'
