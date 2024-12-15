@@ -1,0 +1,45 @@
+---
+import MainCard from './MainCard.astro'
+---
+
+<div class='flex flex-col'>
+	<span class='text-3xl text-black dark:text-white font-bold'
+		>Выполним комплекс работ по обеспечению пожарной безопасности <br />
+		и подготовим объект к прохождению проверки МЧС</span
+	>
+	<div class='w-full flex items-center justify-center flex-col'>
+		<div class='w-full border-[1px] dark:border-gray-600 mt-12'></div>
+		<div class='flex flex-row items-center w-full mt-4 justify-between'>
+			<p class='text-gray-400 font-medium text-lg'>
+				Разработаем проект <br /> на системы пожарной <br /> безопасности
+			</p>
+			<p class='text-gray-400 font-medium text-lg'>
+				Установим пожарную <br /> сигнализацию и системы <br /> пожаротушения
+			</p>
+			<p class='text-gray-400 font-medium text-lg mr-14'>
+				Разработаем и <br />согласуем СТУ и <br />рассчитаем риски
+			</p>
+		</div>
+	</div>
+
+	<div class='w-full flex items-center justify-center flex-col'>
+		<div class='w-full border-[1px] dark:border-gray-600 mt-10'></div>
+		<div class='flex flex-row items-center mt-4 w-full justify-between'>
+			<p class='text-gray-400 font-medium text-lg'>
+				Обеспечим объект <br /> средствами эвакуации <br /> и пожаротушения
+			</p>
+			<p class='text-gray-400 font-medium text-lg -ml-2'>
+				Установим <br /> дымоудаление и нанесем <br /> огнезащитные составы
+			</p>
+			<p class='text-gray-400 font-medium text-lg'>
+				Выполним <br /> обслуживание систем <br /> пожарной безопасности
+			</p>
+		</div>
+	</div>
+	<div class='flex flex-row items-center mt-16 mb-8 w-full justify-center gap-x-8'>
+		<MainCard title='Пожарная сигнализация' />
+		<MainCard title='Системы пожаротушения' />
+		<MainCard title='Документация и проекты' />
+		<MainCard title='Дополнительные услуги' />
+	</div>
+</div>
