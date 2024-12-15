@@ -6,13 +6,130 @@ const categories = await getCategories()
 const { activeCategory } = Astro.props
 ---
 
-<div class='relative flex flex-wrap min-w-full gap-5'>
+<div class='relative flex flex-wrap min-w-full items-end justify-between'>
 	<Category />
-	{
-		categories.map((category: string) => (
-			<Category name={category} activeCategory={activeCategory} />
-		))
-	}
-
+	<div>
+		<button
+			class='bg-gray-800 px-4 text-xl py-2 text-white'
+			id='categories-menu'
+			aria-haspopup='true'
+			aria-expanded='false'
+		>
+			Категории
+		</button>
+		<div
+			id='dropdown-menu'
+			class='hidden absolute mt-2 px-4 py-2 rounded-md shadow-2xl ring-black dark:bg-[#0a0910] bg-white !z-[10000] right-0 whitespace-nowrap'
+			role='menu'
+			aria-orientation='vertical'
+			aria-labelledby='categories-menu'
+		>
+			<div class='gap-2 flex flex-col flex-wrap pb-2 items-end' role='none'>
+				{categories.map((category) => <Category name={category} activeCategory={activeCategory} />)}
+			</div>
+		</div>
+	</div>
 	<div class='hidden sm:block absolute w-full bottom-0 border-b-2 -z-40 dark:border-gray-600'></div>
 </div>
+
+<script>
+	const initializeDropdown = () => {
+		const menuButton = document.getElementById('categories-menu') as HTMLButtonElement | null
+		const dropdownMenu = document.getElementById('dropdown-menu') as HTMLDivElement | null
+		let isMouseOverMenu = false
+		const isMobile = () => window.innerWidth < 768
+
+		if (!menuButton || !dropdownMenu) return
+
+		const showDropdown = () => {
+			menuButton?.setAttribute('aria-expanded', 'true')
+			dropdownMenu?.classList.remove('hidden')
+			adjustDropdownPosition()
+		}
+
+		const hideDropdown = () => {
+			menuButton?.setAttribute('aria-expanded', 'false')
+			dropdownMenu?.classList.add('hidden')
+		}
+
+		const handleMouseEnter = () => {
+			if (!isMobile()) {
+				isMouseOverMenu = true
+				showDropdown()
+			}
+		}
+
+		const handleMouseLeave = () => {
+			if (!isMobile()) {
+				isMouseOverMenu = false
+				setTimeout(() => {
+					if (!isMouseOverMenu) {
+						hideDropdown()
+					}
+				}, 150)
+			}
+		}
+
+		const handleClick = (e: Event) => {
+			e.stopPropagation()
+			const isExpanded = menuButton?.getAttribute('aria-expanded') === 'true'
+			if (isExpanded) {
+				hideDropdown()
+			} else {
+				showDropdown()
+			}
+		}
+
+		const adjustDropdownPosition = () => {
+			if (!menuButton || !dropdownMenu) return
+
+			const dropdownRect = dropdownMenu.getBoundingClientRect()
+			dropdownMenu.style.right = '0'
+			dropdownMenu.style.left = 'auto'
+
+			if (dropdownRect.left < 0) {
+				dropdownMenu.style.left = '0'
+				dropdownMenu.style.right = 'auto'
+			}
+		}
+
+		const setupDesktopInteractions = () => {
+			if (isMobile()) return
+
+			menuButton?.addEventListener('mouseenter', handleMouseEnter)
+			menuButton?.addEventListener('mouseleave', handleMouseLeave)
+			dropdownMenu?.addEventListener('mouseenter', handleMouseEnter)
+			dropdownMenu?.addEventListener('mouseleave', handleMouseLeave)
+		}
+
+		// Initial setup
+		menuButton?.addEventListener('click', handleClick)
+		window.addEventListener('resize', adjustDropdownPosition)
+		setupDesktopInteractions()
+
+		// Close dropdown when clicking outside
+		document.addEventListener('click', (e) => {
+			if (!menuButton?.contains(e.target as Node) && !dropdownMenu?.contains(e.target as Node)) {
+				hideDropdown()
+			}
+		})
+
+		// Update interactions when window is resized
+		window.addEventListener('resize', () => {
+			if (isMobile()) {
+				menuButton?.removeEventListener('mouseenter', handleMouseEnter)
+				menuButton?.removeEventListener('mouseleave', handleMouseLeave)
+				dropdownMenu?.removeEventListener('mouseenter', handleMouseEnter)
+				dropdownMenu?.removeEventListener('mouseleave', handleMouseLeave)
+			} else {
+				setupDesktopInteractions()
+			}
+		})
+	}
+
+	// Initialize on page load
+	initializeDropdown()
+
+	// Re-initialize on client-side navigation/updates
+	document.addEventListener('astro:page-load', initializeDropdown)
+</script>

@@ -5,17 +5,17 @@ import TitlePage from '@/components/TitlePage'
 import BaseLayout from '@/layouts/BaseLayout'
 import { getPosts } from '@/utils'
 
-const MAX_POSTS = 5 // max number of posts to show on the home page
+const MAX_POSTS = 6 // max number of posts to show on the home page
 const posts = await getPosts(MAX_POSTS)
 ---
 
 <BaseLayout title='Главная'>
-	<TitlePage title='ОгнеСтрой' />
+	<TitlePage title='Блог ОгнеСтрой' />
 	<ListCategories />
 
 	<div>
 		<h2 class='text-lg font-medium tracking-wide text-end'>Последние посты</h2>
-		<ListPosts FirstBig={true} posts={posts} />
+		<ListPosts posts={posts} />
 	</div>
 </BaseLayout>
 
