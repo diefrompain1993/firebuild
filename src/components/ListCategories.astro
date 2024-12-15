@@ -33,103 +33,161 @@ const { activeCategory } = Astro.props
 </div>
 
 <script>
-	const initializeDropdown = () => {
-		const menuButton = document.getElementById('categories-menu') as HTMLButtonElement | null
-		const dropdownMenu = document.getElementById('dropdown-menu') as HTMLDivElement | null
-		let isMouseOverMenu = false
-		const isMobile = () => window.innerWidth < 768
+	{
+		const initializeDropdown = () => {
+			const menuButton = document.getElementById('categories-menu') as HTMLButtonElement | null
+			const dropdownMenu = document.getElementById('dropdown-menu') as HTMLDivElement | null
+			let isMouseOverMenu = false
+			let touchStartY = 0
+			let isTouchMove = false
+			const isMobile = () => window.innerWidth < 768
+			let isInitialized = false
 
-		if (!menuButton || !dropdownMenu) return
+			if (!menuButton || !dropdownMenu || isInitialized) return
+			isInitialized = true
 
-		const showDropdown = () => {
-			menuButton?.setAttribute('aria-expanded', 'true')
-			dropdownMenu?.classList.remove('hidden')
-			adjustDropdownPosition()
-		}
-
-		const hideDropdown = () => {
-			menuButton?.setAttribute('aria-expanded', 'false')
-			dropdownMenu?.classList.add('hidden')
-		}
-
-		const handleMouseEnter = () => {
-			if (!isMobile()) {
-				isMouseOverMenu = true
-				showDropdown()
+			const showDropdown = () => {
+				if (!menuButton || !dropdownMenu) return
+				menuButton.setAttribute('aria-expanded', 'true')
+				dropdownMenu.classList.remove('hidden')
+				requestAnimationFrame(adjustDropdownPosition)
 			}
-		}
 
-		const handleMouseLeave = () => {
-			if (!isMobile()) {
-				isMouseOverMenu = false
-				setTimeout(() => {
-					if (!isMouseOverMenu) {
-						hideDropdown()
+			const hideDropdown = () => {
+				if (!menuButton || !dropdownMenu) return
+				menuButton.setAttribute('aria-expanded', 'false')
+				dropdownMenu.classList.add('hidden')
+			}
+
+			const handleMouseEnter = () => {
+				if (!isMobile()) {
+					isMouseOverMenu = true
+					showDropdown()
+				}
+			}
+
+			const handleMouseLeave = () => {
+				if (!isMobile()) {
+					isMouseOverMenu = false
+					setTimeout(() => {
+						if (!isMouseOverMenu) {
+							hideDropdown()
+						}
+					}, 150)
+				}
+			}
+
+			const handleTouchStart = (e: TouchEvent) => {
+				if (isMobile()) {
+					touchStartY = e.touches[0].clientY
+					isTouchMove = false
+				}
+			}
+
+			const handleTouchMove = (e: TouchEvent) => {
+				if (isMobile()) {
+					const touchMoveY = e.touches[0].clientY
+					if (Math.abs(touchMoveY - touchStartY) > 10) {
+						isTouchMove = true
 					}
-				}, 150)
+				}
 			}
+
+			const handleClick = (e: Event) => {
+				e.preventDefault()
+				e.stopPropagation()
+
+				if (isMobile() && e instanceof TouchEvent && isTouchMove) {
+					return
+				}
+
+				const isExpanded = menuButton?.getAttribute('aria-expanded') === 'true'
+				requestAnimationFrame(() => {
+					if (isExpanded) {
+						hideDropdown()
+					} else {
+						showDropdown()
+					}
+				})
+			}
+
+			const adjustDropdownPosition = () => {
+				if (!menuButton || !dropdownMenu) return
+
+				// Reset any previous positioning
+				dropdownMenu.style.right = '0'
+				dropdownMenu.style.left = 'auto'
+			}
+
+			const setupDesktopInteractions = () => {
+				if (isMobile()) return
+
+				menuButton.addEventListener('mouseenter', handleMouseEnter)
+				menuButton.addEventListener('mouseleave', handleMouseLeave)
+				dropdownMenu.addEventListener('mouseenter', handleMouseEnter)
+				dropdownMenu.addEventListener('mouseleave', handleMouseLeave)
+			}
+
+			const removeDesktopInteractions = () => {
+				menuButton.removeEventListener('mouseenter', handleMouseEnter)
+				menuButton.removeEventListener('mouseleave', handleMouseLeave)
+				dropdownMenu.removeEventListener('mouseenter', handleMouseEnter)
+				dropdownMenu.removeEventListener('mouseleave', handleMouseLeave)
+			}
+
+			const handleOutsideClick = (e: Event) => {
+				if (!menuButton.contains(e.target as Node) && !dropdownMenu.contains(e.target as Node)) {
+					hideDropdown()
+				}
+			}
+
+			const handleResize = () => {
+				if (menuButton?.getAttribute('aria-expanded') === 'true') {
+					requestAnimationFrame(adjustDropdownPosition)
+				}
+				if (isMobile()) {
+					removeDesktopInteractions()
+				} else {
+					setupDesktopInteractions()
+				}
+			}
+
+			// Initial setup
+			menuButton.addEventListener('click', handleClick)
+			menuButton.addEventListener('touchstart', handleTouchStart, { passive: true })
+			menuButton.addEventListener('touchmove', handleTouchMove, { passive: true })
+			window.addEventListener('resize', handleResize)
+			document.addEventListener('click', handleOutsideClick)
+			setupDesktopInteractions()
+
+			// Cleanup function
+			const cleanup = () => {
+				menuButton.removeEventListener('click', handleClick)
+				menuButton.removeEventListener('touchstart', handleTouchStart)
+				menuButton.removeEventListener('touchmove', handleTouchMove)
+				window.removeEventListener('resize', handleResize)
+				document.removeEventListener('click', handleOutsideClick)
+				removeDesktopInteractions()
+				isInitialized = false
+			}
+
+			return cleanup
 		}
 
-		const handleClick = (e: Event) => {
-			e.stopPropagation()
-			const isExpanded = menuButton?.getAttribute('aria-expanded') === 'true'
-			if (isExpanded) {
-				hideDropdown()
-			} else {
-				showDropdown()
+		// Initialize on page load
+		let cleanup: (() => void) | undefined
+
+		const initialize = () => {
+			// Clean up previous instance if exists
+			if (cleanup) {
+				cleanup()
 			}
+			cleanup = initializeDropdown()
 		}
 
-		const adjustDropdownPosition = () => {
-			if (!menuButton || !dropdownMenu) return
+		initialize()
 
-			const dropdownRect = dropdownMenu.getBoundingClientRect()
-			dropdownMenu.style.right = '0'
-			dropdownMenu.style.left = 'auto'
-
-			if (dropdownRect.left < 0) {
-				dropdownMenu.style.left = '0'
-				dropdownMenu.style.right = 'auto'
-			}
-		}
-
-		const setupDesktopInteractions = () => {
-			if (isMobile()) return
-
-			menuButton?.addEventListener('mouseenter', handleMouseEnter)
-			menuButton?.addEventListener('mouseleave', handleMouseLeave)
-			dropdownMenu?.addEventListener('mouseenter', handleMouseEnter)
-			dropdownMenu?.addEventListener('mouseleave', handleMouseLeave)
-		}
-
-		// Initial setup
-		menuButton?.addEventListener('click', handleClick)
-		window.addEventListener('resize', adjustDropdownPosition)
-		setupDesktopInteractions()
-
-		// Close dropdown when clicking outside
-		document.addEventListener('click', (e) => {
-			if (!menuButton?.contains(e.target as Node) && !dropdownMenu?.contains(e.target as Node)) {
-				hideDropdown()
-			}
-		})
-
-		// Update interactions when window is resized
-		window.addEventListener('resize', () => {
-			if (isMobile()) {
-				menuButton?.removeEventListener('mouseenter', handleMouseEnter)
-				menuButton?.removeEventListener('mouseleave', handleMouseLeave)
-				dropdownMenu?.removeEventListener('mouseenter', handleMouseEnter)
-				dropdownMenu?.removeEventListener('mouseleave', handleMouseLeave)
-			} else {
-				setupDesktopInteractions()
-			}
-		})
+		// Re-initialize on client-side navigation/updates
+		document.addEventListener('astro:page-load', initialize)
 	}
-
-	// Initialize on page load
-	initializeDropdown()
-
-	// Re-initialize on client-side navigation/updates
-	document.addEventListener('astro:page-load', initializeDropdown)
 </script>
