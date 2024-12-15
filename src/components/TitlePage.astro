@@ -12,7 +12,7 @@ const { title } = Astro.props
 
 <div class='flex items-center gap-2 title justify-between'>
 	<Title>{title}</Title>
-	<div class='flex flex-row items-center gap-x-2'>
+	<div class='flex-row items-center gap-x-2 lg:flex hidden'>
 		<div class='flex flex-col gap-4 md:flex-row md:border-r-2 border-black pr-4 dark:border-white'>
 			<HeaderLink href='/tags' class='flex items-center gap-1 text-2xl md:text-base'>
 				<TagIcon /> Теги
