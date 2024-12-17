@@ -1,0 +1,176 @@
+---
+import MenuIcon from './icons/MenuIcon.astro'
+import CrossIcon from './icons/CrossIcon.astro'
+import Search from '@/components/Search'
+import ToggleTheme from './ToggleTheme.astro'
+import LogoIcon from './icons/LogoIcon.astro'
+import LogoSmallIcon from './icons/LogoSmallIcon.astro'
+
+// ADD YOUR SOCIAL NETWORKS HERE
+// const SOCIALNETWORKS = [
+//  {
+//      name: 'Github',
+//      url: 'https://github.com/danielcgilibert/blog-template',
+//      icon: GithubIcon
+//  },
+
+//  {
+//      name: 'Twitter',
+//      url: 'https://github.com/danielcgilibert/blog-template',
+//      icon: TwitterIcon
+//  }
+// ]
+---
+
+<header class='relative flex items-center h-12 font-semibold justify-between'>
+	<div
+		class='flex items-center flex-row lg:hidden dark:bg-gray-800 bg-gray-200 px-4 py-2 rounded-lg w-[50%] justify-between'
+	>
+		<a href='/'><LogoSmallIcon /></a>
+		<button
+			id='astro-header-drawer-button'
+			type='button'
+			aria-controls='astro-header-drawer'
+			class='md:ml-6 lg:hidden'
+			aria-label='Open Menu'
+		>
+			<MenuIcon />
+		</button>
+	</div>
+	<div class='mr-auto flex-row items-center lg:flex hidden'>
+		<a href='/'><LogoIcon /></a>
+		<nav class='flex flex-row items-center ml-8 gap-x-6'>
+			<a class='text-base mr-auto' href='/'>Услуги</a>
+			<a class='text-base mr-auto' href='/'>Принципы</a>
+			<a class='text-base mr-auto' href='/'>Факты</a>
+			<a class='text-base mr-auto' href='/'>Отрасли</a>
+			<a class='text-base mr-auto' href='/'>Клиенты</a>
+			<a class='text-base mr-auto' href='/'>Технологии</a>
+		</nav>
+	</div>
+
+	<div
+		id='astro-header-drawer'
+		class='w-[90%] m-auto py-4 shadow rounded-l-lg md:hidden md:bg-transparent dark:md:bg-transparent md:shadow-none md:rounded-none md:border-none md:h-auto md:static fixed transition-transform duration-300 ease-in translate-y-[-100%] md:translate-y-0 top-0 right-0 left-0 md:p-0 h-screen z-50'
+	>
+		<div class='flex flex-col justify-between text-left md:flex-row md:w-full md:gap-5'>
+			<header class='flex items-center justify-between'>
+				<div
+					class='flex items-center flex-row lg:hidden dark:bg-gray-800 bg-gray-200 px-4 py-2 rounded-lg w-[50%] justify-between'
+				>
+					<LogoSmallIcon />
+					<button
+						id='astro-header-drawer-button'
+						type='button'
+						aria-controls='astro-header-drawer'
+						class='md:ml-6 lg:hidden'
+						aria-label='Open Menu'
+					>
+						<CrossIcon />
+					</button>
+				</div>
+				<div
+					class='flex items-center gap-3 md:pl-3 dark:bg-gray-800 bg-gray-200 lg:bg-transparent lg:dark:bg-transparent px-4 py-2.5 rounded-lg w-[48%] lg:w-auto'
+				>
+					<div class='flex lg:items-center items-end justify-end w-full gap-x-3'>
+						<div class='lg:hidden'>
+							<Search />
+						</div>
+						<button
+							class='lg:flex hidden items-center justify-center cursor-pointer dark:bg-white bg-[#0a0910] rounded-full px-6 py-2'
+							><a class='text-sm mr-auto dark:text-black text-white' href='/'>Оставить заявку</a
+							></button
+						>
+					</div>
+				</div>
+			</header>
+			<nav
+				class='flex items-center flex-col lg:hidden dark:bg-gray-800 bg-gray-200 gap-y-4 rounded-lg w-full mt-4 py-4 justify-center'
+			>
+				<a class='text-sm' href='/'>Услуги</a>
+				<a class='text-sm' href='/'>Принципы</a>
+				<a class='text-sm' href='/'>Факты</a>
+				<a class='text-sm' href='/'>Отрасли</a>
+				<a class='text-sm' href='/'>Клиенты</a>
+				<a class='text-sm' href='/'>Технологии</a>
+			</nav>
+			<div class='dark:bg-gray-800 bg-gray-200 flex flex-col items-center mt-4 py-4 rounded-lg'>
+				<span class='text-sm'>+7 (999) 999-99-99</span>
+			</div>
+			<div class='dark:bg-gray-800 bg-gray-200 flex flex-col items-center mt-2 py-4 rounded-lg'>
+				<span class='text-sm'>example@gmail.com</span>
+			</div>
+		</div>
+	</div>
+
+	<div
+		id='header-overlay'
+		class='fixed inset-0 bg-black/50 opacity-0 pointer-events-none transition-opacity duration-300 z-40'
+	>
+	</div>
+
+	<div class='flex items-center gap-3 lg:px-4 lg:py-2.5 rounded-lg w-[48%] lg:w-auto'>
+		<div class='flex items-center justify-end w-full gap-x-3'>
+			<!-- <div class='lg:hidden'>
+				<Search />
+			</div> -->
+			<div class='flex-col items-end lg:flex hidden'>
+				<span class='text-sm'>+7 (999) 999-99-99</span>
+				<span class='text-xs text-gray-600'>example@gmail.com</span>
+			</div>
+			<button
+				class='py-2.5 px-1 sm:px-5 flex flex-grow lg:flex-grow-0 items-center justify-center rounded-lg cursor-pointer dark:bg-white bg-[#0a0910] lg:rounded-full lg:px-6 lg:py-2'
+				><a class='text-sm dark:text-black text-white text-center' href='/'>Оставить заявку</a
+				></button
+			>
+		</div>
+		<ToggleTheme />
+	</div>
+</header>
+
+<script>
+	const initializeMenu = () => {
+		const headerDrawer = document.getElementById('astro-header-drawer')
+		const headerOverlay = document.getElementById('header-overlay')
+		const menuButtons = document.querySelectorAll('#astro-header-drawer-button')
+
+		// Очищаем существующие обработчики
+		menuButtons.forEach((button) => {
+			button.replaceWith(button.cloneNode(true))
+		})
+
+		// Получаем обновленные кнопки
+		const updatedMenuButtons = document.querySelectorAll('#astro-header-drawer-button')
+
+		// Добавляем обработчики событий
+		if (updatedMenuButtons && headerDrawer && headerOverlay) {
+			updatedMenuButtons.forEach((button) => {
+				button.addEventListener('click', () => {
+					const isOpen = headerDrawer.classList.contains('!translate-y-0')
+
+					// Открыть или закрыть меню
+					if (isOpen) {
+						headerDrawer.classList.remove('!translate-y-0')
+						headerOverlay.classList.remove('opacity-100', 'pointer-events-auto')
+						document.body.classList.remove('overflow-hidden')
+					} else {
+						headerDrawer.classList.add('!translate-y-0')
+						headerOverlay.classList.add('opacity-100', 'pointer-events-auto')
+						document.body.classList.add('overflow-hidden')
+					}
+				})
+			})
+
+			// Закрыть меню при клике на оверлей
+			headerOverlay.addEventListener('click', () => {
+				headerDrawer.classList.remove('!translate-y-0')
+				headerOverlay.classList.remove('opacity-100', 'pointer-events-auto')
+				document.body.classList.remove('overflow-hidden')
+			})
+		}
+	}
+
+	// Инициализируем меню при загрузке и переходах в SPA
+	document.addEventListener('DOMContentLoaded', initializeMenu)
+	document.addEventListener('astro:page-load', initializeMenu)
+</script>

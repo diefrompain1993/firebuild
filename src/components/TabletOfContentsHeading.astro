@@ -1,0 +1,78 @@
+---
+import { cn } from '@/utils'
+const { heading } = Astro.props
+
+type Heading = {
+	depth: number
+	text: string
+	slug: string
+	subheadings: Heading[]
+}
+
+export interface Props {
+	heading: Heading
+}
+---
+
+<li class='flex flex-col gap-2'>
+	<a href={'#' + heading.slug} class='link'>
+		{heading.text}
+	</a>
+	{
+		heading.subheadings.length > 0 && (
+			<ul class='flex flex-col gap-2'>
+				{heading.subheadings.map((subheading) => (
+					<Astro.self heading={subheading} />
+				))}
+			</ul>
+		)
+	}
+</li>
+
+<style scoped>
+	a.link {
+		position: relative;
+		padding-left: 35px;
+		color: #000;
+		font-weight: 500;
+		line-height: 1.25;
+		background: none !important;
+		transition: 0.3s cubic-bezier(0, 0, 0.265, 1.55);
+		text-wrap: auto;
+	}
+
+	html.dark a.link {
+		color: #fff;
+	}
+
+	a.link::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 50%;
+		transform: translateY(-50%);
+		width: 25px;
+		height: 1px;
+		border-radius: 4px;
+		background: #000;
+		transition: 0.3s cubic-bezier(0, 0, 0.265, 1.55);
+		border: none;
+		outline: none;
+	}
+
+	html.dark a.link::before {
+		background: #fff;
+	}
+
+	a.link.bg-indigo-600,
+	a.link:hover {
+		padding-left: 45px;
+		color: #6366f1 !important;
+	}
+
+	a.link.bg-indigo-600::before,
+	a.link:hover::before {
+		width: 35px;
+		background: #6366f1 !important;
+	}
+</style>

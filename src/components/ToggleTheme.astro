@@ -1,0 +1,77 @@
+---
+import SunIcon from '@/components/icons/SunIcon'
+import MoonIcon from '@/components/icons/MoonIcon'
+import '../styles/global.css'
+---
+
+<script>
+	class themeToggle extends HTMLElement {
+		constructor() {
+			super()
+			this.init()
+		}
+
+		init() {
+			const button = this.querySelector('button') as HTMLButtonElement
+
+			if (button) {
+				// Добавляем обработчик события
+				button.addEventListener('click', () => {
+					const isPressed = button.getAttribute('aria-pressed') === 'true'
+					const newTheme = isPressed ? 'light' : 'dark'
+
+					// Смена темы
+					document.documentElement.classList.toggle('dark', newTheme === 'dark')
+
+					// Сохраняем состояние темы
+					localStorage.setItem('theme', newTheme)
+
+					// Обновляем состояние кнопки
+					button.setAttribute('aria-pressed', String(!isPressed))
+				})
+			}
+		}
+	}
+
+	// Регистрируем компонент
+	if ('customElements' in window) {
+		customElements.define('theme-toggle', themeToggle)
+	}
+
+	// Инициализируем тему при загрузке страницы
+	function initializeTheme() {
+		const button = document.getElementById('toggle-theme')
+		if (!button) return
+
+		// Получаем состояние темы из localStorage
+		const savedTheme = localStorage.getItem('theme')
+		const isDarkTheme =
+			savedTheme === 'dark' ||
+			(!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)
+
+		// Устанавливаем начальное состояние кнопки
+		button.setAttribute('aria-pressed', String(isDarkTheme))
+
+		// Обновляем класс темы
+		document.documentElement.classList.toggle('dark', isDarkTheme)
+	}
+
+	// Выполняем при загрузке страницы
+	initializeTheme()
+
+	// Повторная инициализация при навигации в SPA
+	document.addEventListener('astro:page-load', initializeTheme)
+</script>
+
+<theme-toggle class='relative h-6 w-6'>
+	<button id='toggle-theme' class='group' aria-label='Toggle Theme'>
+		<!-- Sun Icon (Light Theme) -->
+		<span class="absolute left-0 right-0 top-0 opacity-0 group[aria-pressed='true']:opacity-100">
+			<SunIcon />
+		</span>
+		<!-- Moon Icon (Dark Theme) -->
+		<span class="absolute left-0 right-0 top-0 opacity-0 group[aria-pressed='false']:opacity-100">
+			<MoonIcon />
+		</span>
+	</button>
+</theme-toggle>
