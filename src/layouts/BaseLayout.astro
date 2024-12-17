@@ -30,6 +30,13 @@ const { title, description, image, articleDate } = Astro.props
 			body {
 				margin-left: calc(100vw - 100%); /* prevent layout shift */
 			}
+
+			@media screen and (min-width: 1024px) and (max-width: 1280px) {
+				body {
+					padding: 0 20px;
+					margin-left: 0;
+				}
+			}
 		</style>
 	</body>
 </html>

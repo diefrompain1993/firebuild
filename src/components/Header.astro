@@ -1,6 +1,4 @@
 ---
-import TwitterIcon from '@/components/icons/TwitterIcon'
-import GithubIcon from '@/components/icons/GithubIcon'
 import MenuIcon from './icons/MenuIcon.astro'
 import CrossIcon from './icons/CrossIcon.astro'
 import Search from '@/components/Search'
@@ -28,7 +26,7 @@ import LogoSmallIcon from './icons/LogoSmallIcon.astro'
 	<div
 		class='flex items-center flex-row lg:hidden dark:bg-gray-800 bg-gray-200 px-4 py-2 rounded-lg w-[50%] justify-between'
 	>
-		<LogoSmallIcon />
+		<a href='/'><LogoSmallIcon /></a>
 		<button
 			id='astro-header-drawer-button'
 			type='button'
@@ -40,10 +38,7 @@ import LogoSmallIcon from './icons/LogoSmallIcon.astro'
 		</button>
 	</div>
 	<div class='mr-auto flex-row items-center lg:flex hidden'>
-		<!-- <div class='w-20 h-20 bg-[#0a0910] dark:bg-white flex justify-center items-center'>
-			<span class='text-xl font-bold text-white dark:text-black'>LOGO</span>
-		</div> -->
-		<LogoIcon />
+		<a href='/'><LogoIcon /></a>
 		<nav class='flex flex-row items-center ml-8 gap-x-6'>
 			<a class='text-base mr-auto' href='/'>Услуги</a>
 			<a class='text-base mr-auto' href='/'>Принципы</a>
@@ -76,7 +71,6 @@ import LogoSmallIcon from './icons/LogoSmallIcon.astro'
 				</div>
 				<div
 					class='flex items-center gap-3 md:pl-3 dark:bg-gray-800 bg-gray-200 lg:bg-transparent lg:dark:bg-transparent px-4 py-2.5 rounded-lg w-[48%] lg:w-auto'
-					transition:persist='navbar'
 				>
 					<div class='flex lg:items-center items-end justify-end w-full gap-x-3'>
 						<div class='lg:hidden'>
@@ -88,7 +82,6 @@ import LogoSmallIcon from './icons/LogoSmallIcon.astro'
 							></button
 						>
 					</div>
-					<ToggleTheme />
 				</div>
 			</header>
 			<nav
@@ -116,21 +109,19 @@ import LogoSmallIcon from './icons/LogoSmallIcon.astro'
 	>
 	</div>
 
-	<div
-		class='flex items-center gap-3 md:pl-3 dark:bg-gray-800 bg-gray-200 lg:bg-transparent lg:dark:bg-transparent px-4 py-2.5 rounded-lg w-[48%] lg:w-auto'
-		transition:persist='navbar'
-	>
-		<div class='flex lg:items-center items-end justify-end w-full gap-x-3'>
-			<div class='lg:hidden'>
+	<div class='flex items-center gap-3 lg:px-4 lg:py-2.5 rounded-lg w-[48%] lg:w-auto'>
+		<div class='flex items-center justify-end w-full gap-x-3'>
+			<!-- <div class='lg:hidden'>
 				<Search />
-			</div>
+			</div> -->
 			<div class='flex-col items-end lg:flex hidden'>
 				<span class='text-sm'>+7 (999) 999-99-99</span>
 				<span class='text-xs text-gray-600'>example@gmail.com</span>
 			</div>
 			<button
-				class='lg:flex hidden items-center justify-center cursor-pointer dark:bg-white bg-[#0a0910] rounded-full px-6 py-2'
-				><a class='text-sm mr-auto dark:text-black text-white' href='/'>Оставить заявку</a></button
+				class='py-2.5 px-1 sm:px-5 flex flex-grow lg:flex-grow-0 items-center justify-center rounded-lg cursor-pointer dark:bg-white bg-[#0a0910] lg:rounded-full lg:px-6 lg:py-2'
+				><a class='text-sm dark:text-black text-white text-center' href='/'>Оставить заявку</a
+				></button
 			>
 		</div>
 		<ToggleTheme />

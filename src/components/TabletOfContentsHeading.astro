@@ -14,18 +14,13 @@ export interface Props {
 }
 ---
 
-<li class='flex flex-col'>
-	<a
-		href={'#' + heading.slug}
-		class={cn(
-			`bg-slate-200 dark:bg-slate-800 dark:hover:bg-indigo-400 hover:bg-indigo-300 hover:text-white  py-1 px-4 dark:text-white rounded-full mb-2 first-letter:uppercase w-fit line-clamp-2`
-		)}
-	>
+<li class='flex flex-col gap-2'>
+	<a href={'#' + heading.slug} class='link'>
 		{heading.text}
 	</a>
 	{
 		heading.subheadings.length > 0 && (
-			<ul class='ml-3'>
+			<ul class='flex flex-col gap-2'>
 				{heading.subheadings.map((subheading) => (
 					<Astro.self heading={subheading} />
 				))}
@@ -33,3 +28,51 @@ export interface Props {
 		)
 	}
 </li>
+
+<style scoped>
+	a.link {
+		position: relative;
+		padding-left: 35px;
+		color: #000;
+		font-weight: 500;
+		line-height: 1.25;
+		background: none !important;
+		transition: 0.3s cubic-bezier(0, 0, 0.265, 1.55);
+		text-wrap: auto;
+	}
+
+	html.dark a.link {
+		color: #fff;
+	}
+
+	a.link::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 50%;
+		transform: translateY(-50%);
+		width: 25px;
+		height: 1px;
+		border-radius: 4px;
+		background: #000;
+		transition: 0.3s cubic-bezier(0, 0, 0.265, 1.55);
+		border: none;
+		outline: none;
+	}
+
+	html.dark a.link::before {
+		background: #fff;
+	}
+
+	a.link.bg-indigo-600,
+	a.link:hover {
+		padding-left: 45px;
+		color: #6366f1 !important;
+	}
+
+	a.link.bg-indigo-600::before,
+	a.link:hover::before {
+		width: 35px;
+		background: #6366f1 !important;
+	}
+</style>
